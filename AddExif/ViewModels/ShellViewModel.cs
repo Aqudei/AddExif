@@ -22,7 +22,7 @@ namespace AddExif.ViewModels
 {
     class ShellViewModel : BindableBase
     {
-        public string Title => "ExifAdd";
+        public string Title => "ExifAdder App";
 
 
         private DelegateCommand _chooseFolderCommand;

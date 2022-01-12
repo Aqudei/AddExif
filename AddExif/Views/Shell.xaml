@@ -21,26 +21,33 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Margin="2">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+        <GroupBox Margin="2" Header="Inputs">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
 
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox Margin="2" Text="{Binding InputCsv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            <Button Grid.Column="1" Margin="2"  Command="{Binding ChooseCsvCommand}">CSV</Button>
-            <TextBox Text="{Binding InputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="2"></TextBox>
-            <Button Grid.Column="1" Grid.Row="1" Margin="2"  Command="{Binding ChooseFolderCommand}">Folder</Button>
-        </Grid>
+                <TextBox Margin="2" Text="{Binding InputCsv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Column="1" Margin="2"  Command="{Binding ChooseCsvCommand}" Content="CSV"/>
+                <TextBox Text="{Binding InputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="2"/>
+                <Button Grid.Column="1" Grid.Row="1" Margin="2"  Command="{Binding ChooseFolderCommand}" Content="Folder"/>
+            </Grid>
+
+        </GroupBox>
 
         <DataGrid Grid.Row="1" Margin="2" ItemsSource="{Binding Images}" IsReadOnly="True"/>
         <Button Command="{Binding RunCommand}" 
                 Grid.Row="2" Content="Start" Margin="2"/>
-        <TextBox IsReadOnly="True" Grid.Row="3" MinLines="8" Text="{Binding Logs}"/>
+        
+        <GroupBox Grid.Row="3"  Header="Logs" Margin="2">
+            <TextBox IsReadOnly="True" MinLines="8" Text="{Binding Logs}"/>
+        </GroupBox>
+
     </Grid>
 </mah:MetroWindow>
