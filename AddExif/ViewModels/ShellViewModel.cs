@@ -47,12 +47,15 @@ namespace AddExif.ViewModels
         {
             get
             {
-                _runCommand = _runCommand ?? new DelegateCommand(DoRun);
+                _runCommand = _runCommand ?? new DelegateCommand(DoRun, CanRun).ObservesProperty(() => Images.IsEmpty);
                 return _runCommand;
             }
         }
 
-
+        private bool CanRun()
+        {
+            return !Images.IsEmpty;
+        }
 
         public DelegateCommand ChooseFolderCommand
         {
@@ -169,11 +172,10 @@ namespace AddExif.ViewModels
                     keywords += $"-keywords=\"{t}\" ";
                 }
 
-
                 var procInfo = new ProcessStartInfo
                 {
                     FileName = "exiftool.exe",
-                    Arguments = $"-title=\"{imgInfo.Title}\" {keywords} -author=\"{imgInfo.Author}\" -XPSubject=\"{imgInfo.Subject}\" -rating={imgInfo.Rating} -exif:GPSLatitude={imgInfo.Latitude} -exif:GPSLongitude={imgInfo.Longitude} \"{filename}\"",
+                    Arguments = $"-title=\"{imgInfo.Title}\" -XPComment={imgInfo.Comments} {keywords} -author=\"{imgInfo.Author}\" -XPSubject=\"{imgInfo.Subject}\" -rating={imgInfo.Rating} -exif:GPSLatitude={imgInfo.Latitude} -exif:GPSLongitude={imgInfo.Longitude} \"{filename}\"",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true

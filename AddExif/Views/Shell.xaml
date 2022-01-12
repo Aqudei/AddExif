@@ -16,9 +16,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
         <GroupBox Margin="2" Header="Inputs">
@@ -29,14 +29,17 @@
 
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox Margin="2" Text="{Binding InputCsv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Grid.Column="1" Margin="2"  Command="{Binding ChooseCsvCommand}" Content="CSV"/>
-                <TextBox Text="{Binding InputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="2"/>
-                <Button Grid.Column="1" Grid.Row="1" Margin="2"  Command="{Binding ChooseFolderCommand}" Content="Folder"/>
+                <Label VerticalAlignment="Center">Input CSV</Label>
+                <Label VerticalAlignment="Center" Grid.Row="1">Input Folder</Label>
+                <TextBox Grid.Column="1" Margin="2" Text="{Binding InputCsv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Column="2" Margin="2"  Command="{Binding ChooseCsvCommand}" Content="CSV"/>
+                <TextBox Grid.Column="1" Text="{Binding InputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="2"/>
+                <Button Grid.Column="2" Grid.Row="1" Margin="2"  Command="{Binding ChooseFolderCommand}" Content="Folder"/>
             </Grid>
 
         </GroupBox>
@@ -46,7 +49,7 @@
                 Grid.Row="2" Content="Start" Margin="2"/>
         
         <GroupBox Grid.Row="3"  Header="Logs" Margin="2">
-            <TextBox IsReadOnly="True" MinLines="8" Text="{Binding Logs}"/>
+            <TextBox IsReadOnly="True" MinLines="8" Text="{Binding Logs}" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"/>
         </GroupBox>
 
     </Grid>
