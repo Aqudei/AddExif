@@ -214,36 +214,60 @@ namespace AddExif.ViewModels
                 }
 
                 var destination = Path.Combine(InputFolder, imgInfo.NewFileName);
-                File.Move(filename, destination);
+
+                RenameFile(filename, destination);
             });
+        }
+
+        private void RenameFile(string filename, string destination)
+        {
+            try
+            {
+                Logs += $"Renaming {filename} to {destination}{Environment.NewLine}";
+                if (File.Exists(destination))
+                {
+                    File.Delete(destination);
+                }
+
+                File.Move(filename, destination);
+            }
+            catch (Exception ex)
+            {
+                Logs += $"{ex.Message}{Environment.NewLine}";
+            }
         }
 
         private async void DoRun()
         {
-            var progress = await _dialogCoordinator.ShowProgressAsync(this, "Processing...", "Please wait while I process your images.");
-            progress.SetIndeterminate();
-
-            foreach (var imageInfo in _images.Where(i => i.Status.StartsWith("PENDING")))
+            await Task.Run(async () =>
             {
-                try
-                {
-                    var fullPath = Path.Combine(InputFolder, imageInfo.FileName);
-                    await UpdateMeta(fullPath, imageInfo);
-                    await Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
-                    {
-                        imageInfo.Status = $"SUCCESS";
-                    }));
-                }
-                catch (Exception ex)
-                {
-                    await Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
-                     {
-                         imageInfo.Status = $"ERROR - {ex.Message}";
-                     }));
-                }
-            }
+                var progress = await _dialogCoordinator.ShowProgressAsync(this, "Processing...", "Please wait while I process your images.");
+                progress.SetIndeterminate();
 
-            await progress.CloseAsync();
+                foreach (var imageInfo in _images.Where(i => i.Status.StartsWith("PENDING")))
+                {
+                    try
+                    {
+                        var fullPath = Path.Combine(InputFolder, imageInfo.FileName);
+
+                        progress.SetMessage($"Working on {fullPath}");
+                        await UpdateMeta(fullPath, imageInfo);
+                        await Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                        {
+                            imageInfo.Status = $"SUCCESS";
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        await Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                        {
+                            imageInfo.Status = $"ERROR - {ex.Message}";
+                        }));
+                    }
+                }
+
+                await progress.CloseAsync();
+            });
         }
     }
 }
