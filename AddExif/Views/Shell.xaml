@@ -35,7 +35,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Label VerticalAlignment="Center">Input CSV</Label>
-                <Label VerticalAlignment="Center" Grid.Row="1">Input Folder</Label>
+                <Label VerticalAlignment="Center" Grid.Row="1">Image Folder</Label>
                 <TextBox Grid.Column="1" Margin="2" Text="{Binding InputCsv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Grid.Column="2" Margin="2"  Command="{Binding ChooseCsvCommand}" Content="CSV"/>
                 <TextBox Grid.Column="1" Text="{Binding InputFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="2"/>

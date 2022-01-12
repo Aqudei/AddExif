@@ -184,10 +184,23 @@ namespace AddExif.ViewModels
                     keywords += $"-keywords=\"{t}\" ";
                 }
 
+                var longiRef = "E";
+                var latiRef = "N";
+
+                if (imgInfo.Latitude.StartsWith("-"))
+                {
+                    latiRef = "S";
+                }
+                if (imgInfo.Longitude.StartsWith("-"))
+                {
+                    longiRef = "W";
+                }
+
+
                 var procInfo = new ProcessStartInfo
                 {
                     FileName = "exiftool.exe",
-                    Arguments = $"-title=\"{imgInfo.Title}\" -XPComment={imgInfo.Comments} {keywords} -author=\"{imgInfo.Author}\" -XPSubject=\"{imgInfo.Subject}\" -rating={imgInfo.Rating} -exif:GPSLatitude={imgInfo.Latitude} -exif:GPSLongitude={imgInfo.Longitude} \"{filename}\"",
+                    Arguments = $"-title=\"{imgInfo.Title}\" -XPComment={imgInfo.Comments} {keywords} -author=\"{imgInfo.Author}\" -XPSubject=\"{imgInfo.Subject}\" -rating={imgInfo.Rating} -exif:GPSLatitude={imgInfo.Latitude} -exif:GPSLongitude={imgInfo.Longitude} -exif:GPSLongitudeRef={longiRef} -exif:GPSLatitudeRef={latiRef}  \"{filename}\"",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
@@ -199,6 +212,9 @@ namespace AddExif.ViewModels
                     Logs += $"{message}{Environment.NewLine}";
                     process.WaitForExit();
                 }
+
+                var destination = Path.Combine(InputFolder, imgInfo.NewFileName);
+                File.Move(filename, destination);
             });
         }
 
