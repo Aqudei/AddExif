@@ -113,7 +113,7 @@ namespace AddExif.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialogCoordinator.ShowMessageAsync(this, "Something went wrong", ex.StackTrace);
+                await _dialogCoordinator.ShowMessageAsync(this, "Something went wrong", $"{ex.Message}\n\n{ex.StackTrace}");
                 Logger.Error(ex);
             }
         }
