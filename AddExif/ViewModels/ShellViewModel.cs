@@ -22,6 +22,8 @@ namespace AddExif.ViewModels
 {
     class ShellViewModel : BindableBase
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public string Title => "ExifAdder App";
 
 
@@ -88,20 +90,31 @@ namespace AddExif.ViewModels
             _dialogCoordinator = dialogCoordinator;
             Dispatcher = Application.Current.Dispatcher;
 
+
+
         }
         private async void ChooseFolder()
         {
-            var selectFolderDialog = new Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
+            try
             {
-                IsFolderPicker = true,
-                Multiselect = false
-            };
+                var selectFolderDialog = new Microsoft.WindowsAPICodePack.Dialogs.CommonOpenFileDialog
+                {
+                    IsFolderPicker = true,
+                    Multiselect = false
+                };
 
-            var dlgResult = selectFolderDialog.ShowDialog();
-            if (dlgResult == Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogResult.Ok)
+                var dlgResult = selectFolderDialog.ShowDialog();
+                if (dlgResult == Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogResult.Ok)
+                {
+                    InputFolder = selectFolderDialog.FileName;
+                    await ReadImages();
+                }
+
+            }
+            catch (Exception ex)
             {
-                InputFolder = selectFolderDialog.FileName;
-                await ReadImages();
+                await _dialogCoordinator.ShowMessageAsync(this, "Something went wrong", ex.StackTrace);
+                Logger.Error(ex);
             }
         }
 
@@ -137,7 +150,6 @@ namespace AddExif.ViewModels
                         }));
                     }
                 }
-
 
             });
         }
