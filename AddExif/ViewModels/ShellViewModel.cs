@@ -196,9 +196,6 @@ namespace AddExif.ViewModels
                     longiRef = "W";
                 }
 
-
-
-
                 var procInfo = new ProcessStartInfo
                 {
                     FileName = "exiftool.exe",
@@ -259,6 +256,14 @@ namespace AddExif.ViewModels
                     try
                     {
                         var fullPath = Path.Combine(InputFolder, imageInfo.FileName);
+                        if (!File.Exists(fullPath))
+                        {
+                            await Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                            {
+                                imageInfo.Status = $"ERROR - FILE NOT FOUND";
+                            }));
+                            continue;
+                        }
 
                         progress.SetMessage($"Working on {fullPath}");
                         await UpdateMeta(fullPath, imageInfo);
