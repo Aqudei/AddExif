@@ -23,6 +23,11 @@ namespace AddExif.Models
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Author { get; set; }
+        public string Owner { get; set; }
+        public string Computer { get; set; }
+
+        public DateTime? DateCreated { get; set; }
+        public DateTime? DateModified { get; set; }
 
         [Ignore]
         public string Status { get => status; set => SetProperty(ref status, value); }

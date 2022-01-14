@@ -197,10 +197,12 @@ namespace AddExif.ViewModels
                 }
 
 
+
+
                 var procInfo = new ProcessStartInfo
                 {
                     FileName = "exiftool.exe",
-                    Arguments = $"-title=\"{imgInfo.Title}\" -XPComment={imgInfo.Comments} {keywords} -author=\"{imgInfo.Author}\" -XPSubject=\"{imgInfo.Subject}\" -rating={imgInfo.Rating} -exif:GPSLatitude={imgInfo.Latitude} -exif:GPSLongitude={imgInfo.Longitude} -exif:GPSLongitudeRef={longiRef} -exif:GPSLatitudeRef={latiRef}  \"{filename}\"",
+                    Arguments = $"-title=\"{imgInfo.Title}\" -XPComment={imgInfo.Comments} {keywords} -XPAuthor=\"{imgInfo.Author}\" -XPSubject=\"{imgInfo.Subject}\" -rating={imgInfo.Rating} -exif:GPSLatitude={imgInfo.Latitude} -exif:GPSLongitude={imgInfo.Longitude} -exif:GPSLongitudeRef={longiRef} -exif:GPSLatitudeRef={latiRef}  \"{filename}\"",
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
@@ -214,8 +216,16 @@ namespace AddExif.ViewModels
                 }
 
                 var destination = Path.Combine(InputFolder, imgInfo.NewFileName);
-
                 RenameFile(filename, destination);
+
+                if (imgInfo.DateCreated.HasValue)
+                {
+                    File.SetCreationTime(destination, imgInfo.DateCreated.Value);
+                }
+                if (imgInfo.DateModified.HasValue)
+                {
+                    File.SetLastWriteTime(destination, imgInfo.DateModified.Value);
+                }
             });
         }
 
